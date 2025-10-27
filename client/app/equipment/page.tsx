@@ -5,27 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { device_types, locations } from "../generated/prisma/client";
-
-interface EquipmentData {
-    equipment_id: number;
-    equipment_name: string;
-    status: string;
-    device_type_id: number;
-    location_id: number;
-    device_type: device_types;
-    locations: locations;
-}
+import { EquipmentData } from "@/util/interface";
+import { faultyStatusColor } from "@/util/helper";
 
 async function equipmentData() {
     try {
         const res = await fetch('/api/equipment', { cache: 'no-store' });
-        if (!res.ok) {
-            throw new Error('Failed to fetch equipment data');
-        }
-        const data = await res.json();
-        return data;
-
+        return res.json();
     } catch (error) {
         console.error('Error fetching equipment data:', error);
         return [];
@@ -33,10 +19,12 @@ async function equipmentData() {
         // No cleanup actions needed here for fetch
     }
 }
+
 export default function EquipmentList() {
     const [search, setSearch] = useState("");
-
     const [equipment, setEquipment] = useState<EquipmentData[]>([]);
+    
+    const isFaulty = (status: string) => ['Offline', 'Stopped', 'Fault'].includes(status);
 
     useEffect(() => {
         try {
@@ -89,7 +77,7 @@ export default function EquipmentList() {
                                 <TableCell>
                                     <Badge
                                         variant={item.status === "Online" ? "secondary" : "destructive"}
-                                        className={`${item.status === "Offline" || item.status === "Stopped" || item.status === "Fault" ? "bg-red-600 text-white" : "bg-green-600 text-white" }`}
+                                        className={`${faultyStatusColor(item.status)}`}
                                     >
                                         {item.status}
                                     </Badge>

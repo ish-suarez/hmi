@@ -162,7 +162,7 @@ async function createManyMaintenanceEvents() {
 async function createAllSeedData() {
     try { 
         await prisma.$connect();
-        await createManyDeviceTypes()
+        await createManyDeviceTypes();
         await createManyLocations();
         await createManyFaultCodes();
         await createManyEquipmentStatus();
