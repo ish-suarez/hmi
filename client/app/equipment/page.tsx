@@ -23,8 +23,6 @@ async function equipmentData() {
 export default function EquipmentList() {
     const [search, setSearch] = useState("");
     const [equipment, setEquipment] = useState<EquipmentData[]>([]);
-    
-    const isFaulty = (status: string) => ['Offline', 'Stopped', 'Fault'].includes(status);
 
     useEffect(() => {
         try {

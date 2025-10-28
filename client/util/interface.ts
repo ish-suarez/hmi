@@ -1,4 +1,4 @@
-import { device_types, equipment_status, locations } from "@/app/generated/prisma/client";
+import { device_types, equipment_status, locations, maintenance_events, status_logs } from "@/app/generated/prisma/client";
 
 interface EquipmentData extends equipment_status {
     equipment_id: string;
@@ -8,9 +8,15 @@ interface EquipmentData extends equipment_status {
     location_id: number;
     device_type: device_types;
     locations: locations;
+    status_logs: status_logs[];
+    maintenance_events?: maintenance_events;
 }
 
+type equipmentParams = {
+    params: Promise<{ id: string }>;
+};
 
 
 
-export type { EquipmentData };
+
+export type { EquipmentData, equipmentParams};
