@@ -15,8 +15,6 @@ async function equipmentData() {
     } catch (error) {
         console.error('Error fetching equipment data:', error);
         return [];
-    } finally {
-        // No cleanup actions needed here for fetch
     }
 }
 
@@ -33,8 +31,6 @@ export default function EquipmentList() {
             fetchEquipment();
         } catch (error) {
             console.error('Error fetching equipment data:', error);
-        } finally {
-            // No cleanup actions needed here for fetch
         }
 
     }, []);

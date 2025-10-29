@@ -23,8 +23,13 @@ export async function GET(
                 include: {
                     device_type: true,
                     locations: true,
-                    status_logs: true,
+                    status_logs: { 
+                        orderBy: { 
+                            logged_at: 'desc' }, 
+                            take: 50 
+                        },
                     maintenance_events: {
+                        orderBy: { start_time: 'desc' },
                         take: 50,
                     },
                 },

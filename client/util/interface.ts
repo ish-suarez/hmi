@@ -12,6 +12,19 @@ interface EquipmentData extends equipment_status {
     maintenance_events?: maintenance_events;
 }
 
+interface MaintenanceData {
+    event_id: number;
+    equipment_status: { equipment_name: string };
+    maintenance_type: string;
+    technician_name: string;
+    fault_codes?: string | null;
+    action_taken: string;
+    parts_replaced?: string | null;
+    follow_up_required: boolean;
+    start_time: string;
+    end_time: string;
+}
+
 type equipmentParams = {
     params: Promise<{ id: string }>;
 };
@@ -19,4 +32,4 @@ type equipmentParams = {
 
 
 
-export type { EquipmentData, equipmentParams};
+export type { EquipmentData, equipmentParams, MaintenanceData };

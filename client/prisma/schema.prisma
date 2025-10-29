@@ -43,9 +43,9 @@ model fault_codes {
 model equipment_status {
   equipment_id       String               @id @unique
   equipment_name     String               @unique
-  device_type        device_types         @relation(fields: [device_type_id], references: [device_type_id])
+  device_type        device_types         @relation(fields: [device_type_id], references: [device_type_id], onUpdate: Cascade)
   device_type_id     Int
-  locations          locations            @relation(fields: [location_id], references: [location_id])
+  locations          locations            @relation(fields: [location_id], references: [location_id], onUpdate: Cascade)
   location_id        Int
   status             String
   last_checked       DateTime             @default(now())
@@ -60,10 +60,10 @@ model equipment_status {
 
 model status_logs {
   log_id           Int              @id @unique @default(autoincrement())
-  equipment_status equipment_status @relation(fields: [equipment_id], references: [equipment_id], onDelete: Cascade)
+  equipment_status equipment_status @relation(fields: [equipment_id], references: [equipment_id], onUpdate: Cascade )
   equipment_id     String
   status           String
-  fault_codes      fault_codes?     @relation(fields: [fault_code], references: [fault_code])
+  fault_codes      fault_codes?     @relation(fields: [fault_code], references: [fault_code], onUpdate: Cascade )
   fault_code       String?
   value_reading    Float?        // Nullable field
   logged_at        DateTime         @default(now())
@@ -75,10 +75,10 @@ model status_logs {
 
 model maintenance_events {
   event_id           Int              @id @unique @default(autoincrement())
-  equipment_status   equipment_status @relation(fields: [equipment_id], references: [equipment_id], onDelete: Cascade)
+  equipment_status   equipment_status @relation(fields: [equipment_id], references: [equipment_id], onUpdate: Cascade)
   equipment_id       String
   maintenance_type   String
-  fault_codes        fault_codes?     @relation(fields: [fault_code], references: [fault_code])
+  fault_codes        fault_codes?     @relation(fields: [fault_code], references: [fault_code], onUpdate: Cascade)
   fault_code         String?
   technician_name    String
   start_time         DateTime         @default(now())
