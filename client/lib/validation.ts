@@ -25,7 +25,7 @@ export const statusLogSchema = z.object({
 export const maintenanceEventSchema = z.object({
     equipment_id: z.string().min(1),
     maintenance_type: z.string().min(1),
-    fault_code: z.string().optional().nullable(),
+    fault_code: z.string().nullable(),
     technician_name: z.string().min(1),
     start_time: z.coerce.date().optional(),
     end_time: z.coerce.date().optional(),
@@ -36,7 +36,7 @@ export const maintenanceEventSchema = z.object({
 
 // ✅ Device Types
 export const deviceTypeSchema = z.object({
-  device_type_name: z.string().min(1),
+    device_type_name: z.string().min(1),
 });
 
 // ✅ Locations

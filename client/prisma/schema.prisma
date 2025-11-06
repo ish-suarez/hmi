@@ -20,6 +20,7 @@ model device_types {
   is_active        Boolean @default(true)
 
   equipment_status equipment_status[]
+  @@index([device_type_id])
 }
 
 model locations {
@@ -75,15 +76,17 @@ model status_logs {
 
 model maintenance_events {
   event_id           Int              @id @unique @default(autoincrement())
-  equipment_status   equipment_status @relation(fields: [equipment_id], references: [equipment_id], onUpdate: Cascade)
-  equipment_id       String
+  equipment_status   equipment_status? @relation(fields: [equipment_id], references: [equipment_id], onUpdate: Cascade)
+  equipment_id       String?
   maintenance_type   String
   fault_codes        fault_codes?     @relation(fields: [fault_code], references: [fault_code], onUpdate: Cascade)
   fault_code         String?
   technician_name    String
   start_time         DateTime         @default(now())
   end_time           DateTime?
-  action_taken       String
-  parts_replaced     String
+  action_taken       String?
+  parts_replaced     String?
   follow_up_required Boolean
+
+  @@index([event_id])
 }

@@ -1,6 +1,5 @@
 "use client";
 import { use, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { EquipmentData, equipmentParams } from "@/util/interface";
-import { ParamValue } from "next/dist/server/request/params";
 import { faultyStatusColor } from "@/util/helper";
 import { status_logs } from "@/app/generated/prisma/client";
 
@@ -21,20 +19,14 @@ const initFormData = {
     notes: ""
 }
 
-
 export default function EquipmentDetailsPage({ params }: equipmentParams) {
-    const { id } = useParams();
+    
     const resolvedId = use(params).id;
-    console.log("Resolved ID:", resolvedId);
-
-
-    console.log("Params:", id);
-
     const [equipment, setEquipment] = useState<EquipmentData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [formData, setFormData] = useState(initFormData)
+    const [formData, setFormData] = useState(initFormData);
 
     useEffect(() => {
         console.log("Fetching equipment with ID (client):", resolvedId);
@@ -61,7 +53,6 @@ export default function EquipmentDetailsPage({ params }: equipmentParams) {
             </div>
         );
     }
-
     const { equipment_id, equipment_name, device_type: { device_type_name }, locations: { location_name }, maintenance_events, description, fault_code, last_checked } = equipment;
 
 
