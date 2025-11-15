@@ -92,7 +92,7 @@ export default function MaintenanceEventsPage() {
             toast.message("Error", { description: "Failed to delete item." });
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["maintenance_events"] })
+            queryClient.invalidateQueries({ queryKey: ["maintenance_events"] });
         },
         onSuccess: () => {
             toast.message("Deleted", { description: "Maintenance event deleted successfully.", duration: 1_000 });

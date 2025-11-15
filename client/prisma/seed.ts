@@ -1,8 +1,7 @@
 import { PrismaClient } from "../app/generated/prisma/client"; 
 
 const prisma = new PrismaClient()
-
-const { device_types, locations, fault_codes, equipment_status, status_logs, maintenance_events } = prisma;
+const { device_types, locations, fault_codes, equipment_status, } = prisma;
 
 async function createManyDeviceTypes() {
     try {
@@ -148,7 +147,7 @@ async function createManyMaintenanceEvents() {
 
 async function createAllSeedData() {
     try { 
-        await prisma.$connect();
+        await prisma.$connect(); 
         await createManyDeviceTypes();
         await createManyLocations();
         await createManyFaultCodes();

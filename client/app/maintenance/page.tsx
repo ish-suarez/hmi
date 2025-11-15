@@ -10,13 +10,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Loader2, Trash2, Pencil } from "lucide-react";
-import { toast} from "sonner";
+import { toast } from "sonner";
 
 
 // import interfaces for MaintenanceData
 import { Equipment, MaintenanceData } from "@/util/interface";
 import { initialMaintenanceFormData } from "@/util/helper";
-import { set } from "zod";
 
 export default function MaintenancePage() {
 

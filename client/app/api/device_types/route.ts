@@ -1,12 +1,20 @@
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { deviceTypeSchema } from '@/lib/validation';
+import { cookies } from 'next/headers';
 
 const { device_types } = prisma;
 
 // GET /api/device_types
 export async function GET() {
   try {
+
+    const token = (await cookies()).get('user_token')?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const types = await device_types.findMany();
     return NextResponse.json(types, { status: 200 });
   } catch (error) {
