@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model users {
+  user_id         String   @id @default(uuid()) // @map("user_id")
+  username        String   @unique
+  password        String
+  // technician_name String?
+  // is_active       Boolean  @default(true)
+  // created_at      DateTime @default(now())
+  // updated_at      DateTime @updatedAt
+
+  // @@index([user_id])
+  // @@map("users")
+}
+
+
+model device_types {
+  device_type_id   Int     @id @default(autoincrement())
+  device_type_name String  @unique
+  is_active        Boolean @default(true)
+
+  equipment_status equipment_status[]
+
+  @@index([device_type_id])
+}
+
+model locations {
+  location_id      Int                @id @default(autoincrement())
+  location_name    String             @unique
+  is_active        Boolean            @default(true)
+  equipment_status equipment_status[]
+
+  @@index([location_id])
+}
+
+model fault_codes {
+  fault_code         String               @id @unique
+  fault_description  String
+  status_logs        status_logs[]
+  maintenance_events maintenance_events[]
+
+  @@index([fault_code])
+}
+
+model equipment_status {
+  equipment_id       String               @id @unique
+  equipment_name     String               @unique
+  device_type        device_types         @relation(fields: [device_type_id], references: [device_type_id], onUpdate: Cascade)
+  device_type_id     Int
+  locations          locations            @relation(fields: [location_id], references: [location_id], onUpdate: Cascade)
+  location_id        Int
+  status             String
+  last_checked       DateTime             @default(now())
+  fault_code         String? // Nullable field
+  description        String
+  is_active          Boolean              @default(true)
+  status_logs        status_logs[]
+  maintenance_events maintenance_events[]
+
+  @@index([equipment_id])
+}
+
+model status_logs {
+  log_id           Int              @id @unique @default(autoincrement())
+  equipment_status equipment_status @relation(fields: [equipment_id], references: [equipment_id], onUpdate: Cascade)
+  equipment_id     String
+  status           String
+  fault_codes      fault_codes?     @relation(fields: [fault_code], references: [fault_code], onUpdate: Cascade)
+  fault_code       String?
+  value_reading    Float? // Nullable field
+  logged_at        DateTime         @default(now())
+  operator_name    String
+  notes            String
+
+  @@index([status])
+}
+
+model maintenance_events {
+  event_id           Int               @id @unique @default(autoincrement())
+  equipment_status   equipment_status? @relation(fields: [equipment_id], references: [equipment_id], onUpdate: Cascade)
+  equipment_id       String?
+  maintenance_type   String
+  fault_codes        fault_codes?      @relation(fields: [fault_code], references: [fault_code], onUpdate: Cascade)
+  fault_code         String?
+  technician_name    String
+  start_time         DateTime          @default(now())
+  end_time           DateTime?
+  action_taken       String?
+  parts_replaced     String?
+  follow_up_required Boolean
+
+  @@index([event_id])
+}
