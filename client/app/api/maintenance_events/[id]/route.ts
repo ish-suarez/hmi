@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"; 
 import { prisma } from "@/lib/prisma";
-import { treeifyError, z } from "zod";
+import { z, } from "zod";
 import { maintenanceEventSchema } from "@/lib/validation";
 import { maintenanceParams } from "@/util/interface";
 
 
-const { maintenance_events, equipment_status } = prisma;
+const { maintenance_events,  } = prisma;
 
 const idSchema = z.object({
     id: z.coerce.number().int().positive(),
