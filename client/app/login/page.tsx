@@ -35,10 +35,10 @@ export default function LoginPage() {
 
             const data = await res.json();
             if (!res.ok) {
-                setMessage(prev =>data.message);
+                setMessage(data.message);
                 return;
             } else {
-                setMessage(prev => data.message);
+                setMessage(data.message);
                 setTimeout(() => location.reload(), 2000);
             }
 
