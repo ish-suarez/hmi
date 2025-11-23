@@ -70,7 +70,7 @@ export default function SignupPage() {
                 />
                 <Button type="submit" className="mt-4">Sign Up</Button>
                 <Button type="button" onClick={() => window.location.href = '/login'}>Back to Login</Button>
-                {message && <p className={`mt-2 text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
+                {/* {message && <p className={`mt-2 text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>} */}
 
             </fieldset>
         </form>
