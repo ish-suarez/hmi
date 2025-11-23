@@ -52,7 +52,7 @@ export async function POST(req: Request) {
             path: '/',
             sameSite: 'lax',
             maxAge: 300, // 5 minutes
-            secure: false, // Set to false for development over HTTP
+            secure: true, // Set to false for development over HTTP
         });
 
         // Successful login

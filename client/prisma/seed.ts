@@ -1,6 +1,5 @@
-import { PrismaClient } from "../app/generated/prisma/client"; 
+import prisma from "@/lib/prisma";
 
-const prisma = new PrismaClient()
 const { device_types, locations, fault_codes, equipment_status, } = prisma;
 
 async function createManyDeviceTypes() {
@@ -118,7 +117,7 @@ async function createManyStatusLogs() {
         await prisma.status_logs.createMany({
             data: statusLogsToCreate,
             skipDuplicates: true,
-        }).then((res) => {
+        }).then((res: { count: number }) => {
             console.log(`Status logs seeded successfully. ${res.count}`)
         })
         

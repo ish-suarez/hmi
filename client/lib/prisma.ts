@@ -1,4 +1,10 @@
 import { PrismaClient } from '../app/generated/prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
+
+// Initialize Prisma Client with PostgreSQL adapter
+const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL!,
+});
 
 const globalForPrisma = global as unknown as { 
     prisma: PrismaClient
@@ -6,9 +12,9 @@ const globalForPrisma = global as unknown as {
 
 export const prisma = 
     globalForPrisma.prisma || 
-    new PrismaClient({
-        log: ['query', 'info', 'warn', 'error']
-    })
+    new PrismaClient({adapter});
+
+// Prevent multiple instances of Prisma Client in development   
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
