@@ -1,5 +1,6 @@
 "use client";
 
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -69,6 +70,7 @@ export default function SignupPage() {
                 />
                 <Button type="submit" className="mt-4">Sign Up</Button>
                 {message && <p className={`mt-2 text-center ${message.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
+
             </fieldset>
         </form>
     );

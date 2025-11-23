@@ -10,7 +10,7 @@ export async function proxy(req: NextRequest) {
     
     // If token is present or the route is public, proceed with the request
     if ( token && req.nextUrl.pathname === '/login') {
-        return NextResponse.redirect(new URL('/maintenance', req.url));
+        return NextResponse.redirect(new URL('/maintenance-events', req.url));
     }
 
     // If the request is to a protected route and no token is present, return unauthorized
