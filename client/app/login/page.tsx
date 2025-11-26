@@ -74,7 +74,7 @@ export default function LoginPage() {
             </fieldset>
             <Button type="submit">Login</Button>
             <Button type="button" onClick={() => window.location.href = '/signup'}>Register new</Button>
-            {/* {message && <p className={`text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>} */}
+            {message && <p className={`text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
         </form>
     );
 }

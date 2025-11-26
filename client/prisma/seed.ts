@@ -29,7 +29,6 @@ async function createManyDeviceTypes() {
     }
 }
 
-
 async function createManyLocations() {
     try {
         const locationsToCreate = [
