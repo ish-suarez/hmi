@@ -1,11 +1,13 @@
 "use server";
 
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { withAccelerate } from "@prisma/extension-accelerate";
+import { PrismaClient } from "../../../generated/prisma/client";
 import * as bctypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
+const prisma = new PrismaClient({ accelerateUrl: `${process.env.DATABASE_URL!}` }).$extends(withAccelerate());
 const jwtSecret = process.env.JWT_SECRET as string;
 const errorMessage = 'Invalid username or password';
 

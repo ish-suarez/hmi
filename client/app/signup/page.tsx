@@ -34,10 +34,10 @@ export default function SignupPage() {
 
             const data = await res.json();
             if (!res.ok) {
-                setMessage(prev => data.message);
+                setMessage(data.message);
                 return;
             } else {
-                setMessage(prev => data.message);
+                setMessage(data.message);
                 setTimeout(() => location.pathname = '/login', 3000);
             }
 
