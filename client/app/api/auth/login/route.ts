@@ -51,9 +51,9 @@ export async function POST(req: Request) {
         cookieStore.set('user_token', token, {
             name: 'user_token',
             httpOnly: true,
-            domain: 'https://hmi-faot9vjqv-izzs-projects-314e005c.vercel.app',
+            domain: 'hmi-faot9vjqv-izzs-projects-314e005c.vercel.app',
             path: '/',
-            sameSite: 'lax',
+            sameSite: 'none',
             maxAge: 300, // 5 minutes
             secure: true, // Set to false for development over HTTP
         });
