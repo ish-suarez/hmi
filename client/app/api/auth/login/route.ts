@@ -1,4 +1,5 @@
 "use server";
+import 'dotenv/config';
 
 import { NextResponse } from "next/server";
 import { withAccelerate } from "@prisma/extension-accelerate";
@@ -7,7 +8,7 @@ import * as bctypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const prisma = new PrismaClient({ accelerateUrl: `${process.env.DATABASE_URL!}` }).$extends(withAccelerate());
+const prisma = new PrismaClient({ accelerateUrl: process.env.DATABASE_URL! }).$extends(withAccelerate());
 const jwtSecret = process.env.JWT_SECRET as string;
 const errorMessage = 'Invalid username or password';
 
