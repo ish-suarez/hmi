@@ -1,10 +1,7 @@
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { PrismaClient } from "../app/generated/prisma/client";
-import { PrismaPg } from '@prisma/adapter-pg';
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: `${process.env.DATABASE_URL!}` }) });
-
-// const prisma = new PrismaClient({ accelerateUrl: `${process.env.DATABASE_URL!}` }).$extends(withAccelerate());
+const prisma = new PrismaClient({ accelerateUrl: `${process.env.DATABASE_URL!}` }).$extends(withAccelerate());
 
 const { device_types, locations, fault_codes, equipment_status } = prisma;
 

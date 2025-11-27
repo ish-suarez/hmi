@@ -2,7 +2,6 @@
 import 'dotenv/config';
 
 import { NextResponse } from "next/server";
-import { withAccelerate } from "@prisma/extension-accelerate";
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from "../../../generated/prisma/client";
 import * as bctypt from "bcrypt";
