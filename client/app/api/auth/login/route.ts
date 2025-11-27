@@ -51,11 +51,11 @@ export async function POST(req: Request) {
         cookieStore.set('user_token', token, {
             name: 'user_token',
             httpOnly: true,
-            domain: 'hmi-faot9vjqv-izzs-projects-314e005c.vercel.app',
+            domain: '.vercel.app',
             path: '/',
             sameSite: 'none',
             maxAge: 300, // 5 minutes
-            secure: true, // Set to false for development over HTTP
+            secure: process.env.NODE_ENV === 'production', // Set to false for development over HTTP
         });
 
         // Successful login
