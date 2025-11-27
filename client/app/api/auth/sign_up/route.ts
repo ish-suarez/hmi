@@ -1,10 +1,5 @@
 import { NextResponse } from 'next/server';
-import { withAccelerate } from "@prisma/extension-accelerate";
-import { PrismaClient } from "../../../generated/prisma/client";
-
-const accelerateUrl = process.env.DATABASE_URL!;
-
-const prisma = new PrismaClient({ accelerateUrl }).$extends(withAccelerate());
+import { prisma } from '@/lib/prisma';
 
 import * as bcrypt from 'bcrypt';
 

@@ -1,22 +1,16 @@
 "use server";
 
 import { NextResponse } from "next/server";
-// import { PrismaClient } from "../../../generated/prisma/client";
-// import { withAccelerate } from "@prisma/extension-accelerate";
 import * as bctypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-
 import { prisma } from "@/lib/prisma";
 
-// const accelerateUrl = process.env.DATABASE_URL!;
-// const prisma = new PrismaClient({ accelerateUrl }).$extends(withAccelerate());
+const { users, } = prisma;
+
 const jwtSecret = process.env.JWT_SECRET as string;
 const errorMessage = 'Invalid username or password';
 
-
-
-const { users, } = prisma;
 
 export async function POST(req: Request) {
     try {
@@ -56,7 +50,7 @@ export async function POST(req: Request) {
             name: 'user_token',
             httpOnly: true,
             path: '/',
-            sameSite: 'lax',
+            sameSite: 'none',
             maxAge: 300, // 5 minutes
             secure: true, // Set to false for development over HTTP
         });
