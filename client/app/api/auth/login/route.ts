@@ -46,12 +46,12 @@ export async function POST(req: Request) {
         // Create token
         const token = jwt.sign(payload, jwtSecret, { expiresIn: '5m', algorithm: 'HS256' });
 
-        // Set token in HttpOnly cookie
+        // Set token in HttpsOnly cookie
         const cookieStore = await cookies();
         cookieStore.set('user_token', token, {
             name: 'user_token',
             httpOnly: true,
-            domain: 'https://hmi-nz56oto0m-izzs-projects-314e005c.vercel.app/',
+            domain: 'https://hmi-faot9vjqv-izzs-projects-314e005c.vercel.app',
             path: '/',
             sameSite: 'lax',
             maxAge: 300, // 5 minutes
