@@ -51,15 +51,14 @@ export async function POST(req: Request) {
         cookieStore.set('user_token', token, {
             name: 'user_token',
             httpOnly: true,
-            domain: '.vercel.app',
             path: '/',
-            sameSite: 'none',
+            sameSite: 'lax',
             maxAge: 300, // 5 minutes
-            secure: process.env.NODE_ENV === 'production', // Set to false for development over HTTP
+            secure: true, // Set to false for development over HTTP
         });
 
         // Successful login
-        return NextResponse.json({ message: 'Login successful' }, { status: 200 });
+        return NextResponse.json({ message: 'Login successful' }, { status: 200 },);
 
     } catch (error) {
         return NextResponse.json(
