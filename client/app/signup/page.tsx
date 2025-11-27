@@ -4,6 +4,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import clsx from "clsx";
+import { string } from "zod";
 
 const signupInitialValues = {
     username: '',
@@ -13,7 +15,7 @@ const signupInitialValues = {
 
 export default function SignupPage() {
     const [signupValues, setSignupValues] = useState(signupInitialValues);
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState<string>('');
 
     const handleChange = (e: React.FormEvent) => {
         e.preventDefault();
@@ -47,6 +49,7 @@ export default function SignupPage() {
             setSignupValues(signupInitialValues);
         }
     }
+    console.log('Message:', message);
 
     return (
         <form method="POST" onSubmit={handleSubmit} className="flex flex-col gap-4 w-64 mx-auto mt-20">
@@ -70,7 +73,7 @@ export default function SignupPage() {
                 />
                 <Button type="submit" className="mt-4">Sign Up</Button>
                 <Button type="button" onClick={() => window.location.href = '/login'}>Back to Login</Button>
-                {message && <p className={`mt-2 text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
+                {message && <p className={clsx("mt-2 text-center", message?.includes('success') ? 'text-green-600' : 'text-red-500')}>{message}</p>}
 
             </fieldset>
         </form>
