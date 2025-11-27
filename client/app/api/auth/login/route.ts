@@ -3,12 +3,13 @@ import 'dotenv/config';
 
 import { NextResponse } from "next/server";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from "../../../generated/prisma/client";
 import * as bctypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const prisma = new PrismaClient({ accelerateUrl: process.env.DATABASE_URL! }).$extends(withAccelerate());
+const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: `${process.env.DATABASE_URL!}` }) });
 const jwtSecret = process.env.JWT_SECRET as string;
 const errorMessage = 'Invalid username or password';
 
