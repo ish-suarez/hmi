@@ -1,11 +1,9 @@
 "use client";
 
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import clsx from "clsx";
-import { string } from "zod";
 
 const signupInitialValues = {
     username: '',
@@ -40,6 +38,7 @@ export default function SignupPage() {
                 return;
             } else {
                 setMessage(data.message);
+                console.log('Signup successful, redirecting to login page...');
                 setTimeout(() => location.pathname = '/login', 3000);
             }
 
@@ -49,7 +48,7 @@ export default function SignupPage() {
             setSignupValues(signupInitialValues);
         }
     }
-    console.log('Message:', message);
+    
 
     return (
         <form method="POST" onSubmit={handleSubmit} className="flex flex-col gap-4 w-64 mx-auto mt-20">
