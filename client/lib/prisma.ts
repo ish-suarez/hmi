@@ -10,7 +10,7 @@ const globalForPrisma = global as unknown as {
 
 export const prisma = 
     globalForPrisma.prisma || 
-    new PrismaClient({accelerateUrl }).$extends(withAccelerate());
+    new PrismaClient({accelerateUrl}).$extends(withAccelerate());
 
 // Prevent multiple instances of Prisma Client in development   
 
