@@ -51,7 +51,7 @@ export async function POST(req: Request) {
         cookieStore.set('user_token', token, {
             name: 'user_token',
             httpOnly: true,
-            domain: 'localhost',
+            domain: 'https://hmi-nz56oto0m-izzs-projects-314e005c.vercel.app/',
             path: '/',
             sameSite: 'lax',
             maxAge: 300, // 5 minutes
