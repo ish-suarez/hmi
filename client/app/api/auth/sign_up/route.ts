@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
-import { withAccelerate } from "@prisma/extension-accelerate";
+// import { withAccelerate } from "@prisma/extension-accelerate";
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from "../../../generated/prisma/client";
 
-// const prisma = new PrismaClient({ accelerateUrl: `${process.env.DATABASE_URL!}` }).$extends(withAccelerate());
+
+const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: `${process.env.DATABASE_URL!}` }) })
 import * as bcrypt from 'bcrypt';
 
 const { users, } = prisma;
