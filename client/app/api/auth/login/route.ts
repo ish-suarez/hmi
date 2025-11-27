@@ -7,7 +7,8 @@ import * as bctypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const prisma = new PrismaClient({ accelerateUrl: process.env.DATABASE_URL! }).$extends(withAccelerate());
+const accelerateUrl = process.env.DATABASE_URL!;
+const prisma = new PrismaClient({ accelerateUrl }).$extends(withAccelerate());
 const jwtSecret = process.env.JWT_SECRET as string;
 const errorMessage = 'Invalid username or password';
 
