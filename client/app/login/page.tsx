@@ -13,7 +13,7 @@ export default function LoginPage() {
 
     // State for login form
     const [loginValues, setLoginValues] = useState(loginInitialValues);
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState<string>('');
 
     const handleChange = (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,6 +34,7 @@ export default function LoginPage() {
 
 
             const data = await res.json();
+            console.log('Login Response Data:', data);
             if (!res.ok) {
                 setMessage(data.message);
                 return;
@@ -74,7 +75,7 @@ export default function LoginPage() {
             </fieldset>
             <Button type="submit">Login</Button>
             <Button type="button" onClick={() => window.location.href = '/signup'}>Register new</Button>
-            {message && <p className={`text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
+            {message && <p className={`mt-2 text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message.includes('success') ? `${message}, Redirecting...` : message}</p>}
         </form>
     );
 }

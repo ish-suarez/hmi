@@ -2,7 +2,7 @@ import { PrismaClient } from '../app/generated/prisma/client'
 import { withAccelerate } from '@prisma/extension-accelerate'
 
 // Initialize Prisma Client with PostgreSQL adapter
-const accelerateUrl = process.env.DATABASE_URL!;
+const accelerateUrl = process.env.DEV_DATABASE_URL!; // Use DEV_DATABASE_URL for development OR DATABASE_URL for production
 
 const globalForPrisma = global as unknown as { 
     prisma: PrismaClient

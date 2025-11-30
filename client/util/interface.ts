@@ -51,9 +51,19 @@ type maintenanceParams = {
     params: Promise<{ id: string }>;
 };
 
+interface MaintenanceEventCreate {
+    equipment_id: number;
+    maintenance_type: string;
+    technician_name: string;
+    fault_code?: string | null;
+    action_taken: string;
+    parts_replaced?: string | null;
+    follow_up_required: boolean;
+}
 
 
 
 
 
-export type { EquipmentData, equipmentParams, MaintenanceData, Equipment, maintenanceParams, MaintenanceEventUpdate };
+
+export type { EquipmentData, equipmentParams, MaintenanceData, Equipment, maintenanceParams, MaintenanceEventUpdate, MaintenanceEventCreate };

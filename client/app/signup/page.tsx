@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import clsx from "clsx";
 
 const signupInitialValues = {
     username: '',
@@ -38,8 +37,7 @@ export default function SignupPage() {
                 return;
             } else {
                 setMessage(data.message);
-                console.log('Signup successful, redirecting to login page...');
-                setTimeout(() => location.pathname = '/login', 3000);
+                setTimeout(() => location.pathname = '/login', 2000);
             }
 
         } catch (error) {
@@ -72,7 +70,7 @@ export default function SignupPage() {
                 />
                 <Button type="submit" className="mt-4">Sign Up</Button>
                 <Button type="button" onClick={() => window.location.href = '/login'}>Back to Login</Button>
-                {message && <p className={clsx("mt-2 text-center", message?.includes('success') ? 'text-green-600' : 'text-red-500')}>{message}</p>}
+                {message && <p className={`mt-2 text-center ${message?.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{`${message.includes('success') ? `${message}, Redirecting to login...` : message}`}</p>}
 
             </fieldset>
         </form>

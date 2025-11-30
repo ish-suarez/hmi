@@ -1,20 +1,52 @@
 "use client";
 
-import { useState } from "react";
+
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Loader2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-import { MaintenanceData, MaintenanceEventUpdate } from "@/util/interface";
+import { MaintenanceData, MaintenanceEventUpdate, MaintenanceEventCreate, Equipment } from "@/util/interface";
+import { initialMaintenanceFormData } from "@/util/helper";
+
 
 async function fetchEvents(): Promise<MaintenanceData[]> {
     const res = await fetch("/api/maintenance_events");
     if (!res.ok) throw new Error("Failed to fetch maintenance events");
     return res.json();
 }
+
+async function fetchEquipment(setEquipmentList: Dispatch<SetStateAction<Equipment[]>>) {
+    try {
+        const res = await fetch("/api/equipment");
+        const data = await res.json();
+        setEquipmentList(data);
+        
+        if (!res.ok) throw new Error("Failed to fetch equipment");
+        return res.json();
+
+    } catch (error) {
+        console.error("Error fetching equipment:", error);  
+    }
+}
+
+async function createEventApi(newEvent: MaintenanceEventCreate ): Promise<MaintenanceData> {
+    const res = await fetch(`/api/maintenance_events`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newEvent),
+    });
+    if (!res.ok) {
+        const payload = await res.json().catch(() => null);
+        throw new Error(payload?.error || "Failed to create maintenance event");
+    }
+    return res.json();
+}
+
 
 async function deleteEventApi(event_id: number): Promise<void> {
     const res = await fetch(`/api/maintenance_events/${event_id}`,
@@ -37,8 +69,11 @@ async function updateEventApi(update: MaintenanceEventUpdate): Promise<Maintenan
 
 export default function MaintenanceEventsPage() {
     const queryClient = useQueryClient();
+    const [equipmentList, setEquipmentList] = useState<Equipment[]>([]);
+    const [selectedEquipment, setSelectedEquipment] = useState<string>('all');
     const [filter, setFilter] = useState("");
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [addEventForm, setAddEventForm] = useState(initialMaintenanceFormData);
     const [formData, setFormData] = useState<MaintenanceEventUpdate | object>({});
 
     // Fetch maintenance events
@@ -47,6 +82,99 @@ export default function MaintenanceEventsPage() {
         queryFn: fetchEvents,
         staleTime: 10_000, // 10 seconds
     });
+
+    // Fetch equipment list
+    useEffect(() => {
+        fetchEquipment(setEquipmentList);
+    }, []);
+
+    const createMutation = useMutation<
+    MaintenanceData,
+    Error,
+    MaintenanceEventCreate,
+    { previous?: MaintenanceData[] }
+>({
+    mutationFn: (data) => createEventApi(data),
+
+    onMutate: async (newItem) => {
+        await queryClient.cancelQueries({ queryKey: ["maintenance_events"] });
+
+        const previous = queryClient.getQueryData<MaintenanceData[]>(["maintenance_events"]);
+
+        const optimisticItem: MaintenanceData = {
+            ...newItem,
+            event_id: -Date.now(), // temp ID
+            start_time: new Date().toISOString(),
+            end_time: null,
+             equipment_status: { equipment_name: equipmentList.find(e => e.equipment_id === addEventForm.equipment_id)?.equipment_name || "unknown" }, // filled on refetch
+        };
+
+        queryClient.setQueryData<MaintenanceData[] | undefined>(
+            ["maintenance_events"],
+            (old) => (old ? [...old, optimisticItem] : [optimisticItem])
+        );
+
+        toast.message("Added locally", { description: "Syncing with server..." });
+
+        return { previous };
+    },
+
+    onError: (err, newItem, context) => {
+        if (context?.previous) {
+            queryClient.setQueryData(["maintenance_events"], context.previous);
+        }
+        toast.message("Error", { description: err.message });
+    },
+
+    onSuccess: () => {
+        toast.message("Event Added", { description: "Maintenance event created." });
+    },
+
+    onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["maintenance_events"] });
+    },
+});
+
+    // const createEventMutation = useMutation<MaintenanceData, Error, MaintenanceEventCreate, { previous?: MaintenanceData[] }>({
+    //     mutationFn: data => createEventApi(data),
+    //     onMutate: async (newEvent) => {
+    //         await queryClient.cancelQueries({ queryKey: ["maintenance_events"] });
+    //         const previous = queryClient.getQueryData<MaintenanceData[]>(["maintenance_events"]);
+
+    //         const tempId = Math.max(0, ...(previous?.map(e => e.event_id) || [0])) + 1;
+    //         const optimisticEvent: MaintenanceData = {
+    //             event_id: tempId,
+    //             equipment_id: parseInt(newEvent.equipment_id),
+    //             maintenance_type: newEvent.maintenance_type,
+    //             technician_name: newEvent.technician_name,
+    //             fault_code: newEvent.fault_code || null,
+    //             action_taken: newEvent.action_taken,
+    //             parts_replaced: newEvent.parts_replaced || null,
+    //             follow_up_required: newEvent.follow_up_required,
+    //             start_time: new Date().toISOString(),
+    //             end_time: null,
+    //             equipment_status: { equipment_name: "Loading..." },
+    //         };
+
+    //         queryClient.setQueryData<MaintenanceData[] | undefined>(
+    //             ["maintenance_events"],
+    //             (old) => old ? [optimisticEvent, ...old] : [optimisticEvent]
+    //         );
+
+    //         toast.message("Added locally", { description: "Change will sync shortly.", duration: 2_000 });
+
+    //         return { previous };
+    //     },
+    //     onSettled: () => {
+    //         queryClient.invalidateQueries({ queryKey: ["maintenance_events"] });
+    //     },
+    //     onSuccess: () => {
+    //         toast.message("Added", { description: "Maintenance event added successfully.", duration: 3_000 });
+    //     },
+    //     onError: (error) => {
+    //         toast.message("Error", { description: error.message });
+    //     }
+    // }); 
 
     // Optimistic update for DELETE 
     const deleteMutation = useMutation<
@@ -172,6 +300,21 @@ export default function MaintenanceEventsPage() {
                     className="w-1/3"
                 />
                 <div className="text-sm text-muted-foreground">Showing {filteredEvents.length} of {events.length}</div>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button>Add Maintenance Event</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Add Maintenance Event</DialogTitle>
+                        </DialogHeader>
+                        {/* Form fields for adding a maintenance event */}
+                        <form>
+                            
+                        </form>
+                    </DialogContent>
+                </Dialog>
+                
             </div>
 
             {isLoading ? (

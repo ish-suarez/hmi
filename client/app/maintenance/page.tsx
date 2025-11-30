@@ -105,7 +105,7 @@ export default function MaintenancePage() {
                 );
                 getMaintenanceEvents(selectedEquipment);
                 toast.dismiss('create-maintenance');
-                toast.success("Created", { description: "The maintenance event has been recorded.", duration: 3000 });
+                toast.success("Created", { description: "The maintenance event has been recorded.", duration: 2000 });
             } else {
                 setEvents(prev => prev.filter(ev => ev.event_id !== newTempId));
                 toast.error("Error", { description: "Failed to submit maintenance event." });
@@ -176,6 +176,7 @@ export default function MaintenancePage() {
             getMaintenanceEvents(selectedEquipment);
         }
     }
+
 
     return (
         <div className='p-6 space-y-6'>

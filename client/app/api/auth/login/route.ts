@@ -44,15 +44,15 @@ export async function POST(req: Request) {
         // Create token
         const token = jwt.sign(payload, jwtSecret, { expiresIn: '5m', algorithm: 'HS256' });
 
-        // Set token in HttpsOnly cookie
+        // Set token in HttpsOnly cookie 
         const cookieStore = await cookies();
         cookieStore.set('user_token', token, {
             name: 'user_token',
-            httpOnly: true,
+            domain: 'localhost', // Adjust domain as needed
+            httpOnly: true, // Accessible only by the server
             path: '/',
-            sameSite: 'none',
             maxAge: 300, // 5 minutes
-            secure: true, // Set to false for development over HTTP
+            secure: false, // Set to false for development over HTTP
         });
 
         // Successful login
